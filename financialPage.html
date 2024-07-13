@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFO-Aplikacija za Finansijske Obračune</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #app {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-section {
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+    body{
+        background-color: gray;
+
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Obračun kamate</h1>
+    
+    <div class="input-section">
+      <label for="amount">Iznos:</label>
+      <input type="number" id="amount" v-model="amount">
+    </div>
+    
+    <div class="input-section">
+      <label for="interestRate">Kamatna stopa (%):</label>
+      <input type="number" id="interestRate" v-model="interestRate">
+    </div>
+
+    <div class="input-section">
+      <label for="period">Period (u godinama):</label>
+      <input type="number" id="period" v-model="period">
+    </div>
+
+    <div class="input-section">
+      <label for="compoundType">Tip kamatnog računanja:</label>
+      <select id="compoundType" v-model="compoundType">
+        <option value="monthly">Mesečno</option>
+        <option value="quarterly">Kvartalno</option>
+        <option value="annually">Godišnje</option>
+      </select>
+    </div>
+
+    <div class="input-section">
+      <label for="initialDeposit">Početni depozit:</label>
+      <input type="number" id="initialDeposit" v-model="initialDeposit">
+    </div>
+    
+    <button @click="calculateInterest">Izračunaj kamatu</button>
+    
+    <div v-if="interest !== null" class="result">
+      <p>Kamatni iznos: {{ interest }}</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // jQuery initialization if needed
+    });
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        amount: null,
+        interestRate: null,
+        period: null,
+        compoundType: 'monthly', // default monthly
+        initialDeposit: null,
+        interest: null
+      },
+      methods: {
+        calculateInterest: function() {
+          if (this.amount && this.interestRate && this.period) {
+            var totalPeriods;
+            var monthlyInterestRate = this.interestRate / 100 / 12;
+            
+            if (this.compoundType === 'quarterly') {
+              totalPeriods = this.period * 4;
+              monthlyInterestRate = this.interestRate / 100 / 4;
+            } else if (this.compoundType === 'annually') {
+              totalPeriods = this.period;
+              monthlyInterestRate = this.interestRate / 100;
+            } else { // default to monthly
+              totalPeriods = this.period * 12;
+            }
+
+            var futureValue = this.amount * Math.pow(1 + monthlyInterestRate, totalPeriods);
+            if (this.initialDeposit) {
+              futureValue += this.initialDeposit;
+            }
+            var interest = futureValue - (this.amount + (this.initialDeposit || 0));
+            this.interest = interest.toFixed(2); // formatiranje na dve decimale
+          } else {
+            alert('Molimo unesite iznos, kamatnu stopu i period.');
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

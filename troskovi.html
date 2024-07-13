@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFO-Aplikacija za Finansijske Obračune</title>
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #app {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-section {
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    body{
+        background-color: gray;
+
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Obračun troškova putovanja</h1>
+    
+    <div class="input-section">
+      <label for="distance">Udaljenost (km):</label>
+      <input type="number" id="distance" v-model="distance">
+    </div>
+    
+    <div class="input-section">
+      <label for="fuelPrice">Cena goriva po litru:</label>
+      <input type="number" id="fuelPrice" v-model="fuelPrice">
+    </div>
+
+    <div class="input-section">
+      <label for="fuelConsumption">Potrošnja goriva (l/100km):</label>
+      <input type="number" id="fuelConsumption" v-model="fuelConsumption">
+    </div>
+
+    <button @click="calculateTravelCost">Izračunaj troškove</button>
+    
+    <div v-if="totalCost !== null" class="result">
+      <p>Troškovi putovanja: {{ totalCost }} RSD</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        distance: null,
+        fuelPrice: null,
+        fuelConsumption: null,
+        totalCost: null
+      },
+      methods: {
+        calculateTravelCost: function() {
+          if (this.distance && this.fuelPrice && this.fuelConsumption) {
+            var fuelCost = (this.distance / 100) * this.fuelConsumption * this.fuelPrice;
+            this.totalCost = fuelCost.toFixed(2); // formatiranje na dve decimale
+          } else {
+            alert('Molimo unesite udaljenost, cenu goriva i potrošnju goriva.');
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

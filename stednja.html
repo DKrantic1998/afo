@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFO-Aplikacija za Finansijske Obračune</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #app {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-section {
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    body{
+        background-color: gray;
+
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Obračun štednje</h1>
+    
+    <div class="input-section">
+      <label for="monthlySaving">Mesečna štednja (RSD):</label>
+      <input type="number" id="monthlySaving" v-model="monthlySaving">
+    </div>
+    
+    <div class="input-section">
+      <label for="targetAmount">Ciljani iznos štednje (RSD):</label>
+      <input type="number" id="targetAmount" v-model="targetAmount">
+    </div>
+    
+    <button @click="calculateSavings">Izračunaj</button>
+    
+    <div v-if="monthsToSave !== null" class="result">
+      <p>Broj meseci potreban za dostizanje cilja: {{ monthsToSave }}</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        monthlySaving: null,
+        targetAmount: null,
+        monthsToSave: null
+      },
+      methods: {
+        calculateSavings: function() {
+          if (this.monthlySaving && this.targetAmount) {
+            this.monthsToSave = Math.ceil(this.targetAmount / this.monthlySaving);
+          } else {
+            alert('Molimo unesite mesečnu štednju i ciljani iznos štednje.');
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

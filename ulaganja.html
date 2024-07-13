@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFO-Aplikacija za Finansijske Obračune</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #app {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-section {
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    body{
+        background-color: gray;
+
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Obračun ulaganja</h1>
+    <div class="input-section">
+      <label for="initialInvestment">Početna investicija:</label>
+      <input type="number" id="initialInvestment" v-model="initialInvestment">
+    </div>
+    
+    <div class="input-section">
+      <label for="annualInterestRate">Godišnja kamatna stopa (%):</label>
+      <input type="number" id="annualInterestRate" v-model="annualInterestRate">
+    </div>
+
+    <div class="input-section">
+      <label for="investmentTerm">Period ulaganja (u godinama):</label>
+      <input type="number" id="investmentTerm" v-model="investmentTerm">
+    </div>
+
+    <div class="input-section">
+      <label for="monthlyContribution">Mesečni doprinos:</label>
+      <input type="number" id="monthlyContribution" v-model="monthlyContribution">
+    </div>
+    
+    <button @click="calculateInvestment">Izračunaj ukupno stanje</button>
+    
+    <div v-if="totalAmount !== null" class="result">
+      <p>Ukupan iznos nakon {{ investmentTerm }} godina: {{ totalAmount }}</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        initialInvestment: null,
+        annualInterestRate: null,
+        investmentTerm: null,
+        monthlyContribution: null,
+        totalAmount: null
+      },
+      methods: {
+        calculateInvestment: function() {
+          if (this.initialInvestment && this.annualInterestRate && this.investmentTerm) {
+            var totalMonths = this.investmentTerm * 12;
+            var monthlyInterestRate = this.annualInterestRate / 100 / 12;
+            var futureValue = this.initialInvestment;
+            
+            if (this.monthlyContribution) {
+              for (var i = 0; i < totalMonths; i++) {
+                futureValue = futureValue * (1 + monthlyInterestRate) + parseFloat(this.monthlyContribution);
+              }
+            } else {
+              futureValue = futureValue * Math.pow(1 + monthlyInterestRate, totalMonths);
+            }
+
+            this.totalAmount = futureValue.toFixed(2); // formatiranje na dve decimale
+          } else {
+            alert('Molimo unesite početnu investiciju, godišnju kamatnu stopu i period ulaganja.');
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
